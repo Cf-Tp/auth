@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
     background: #0A0A0A;
     color: #E0E0E0;
     display: flex;
@@ -15,7 +15,7 @@ body {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 700px;
     width: 100%;
 }
 
@@ -57,15 +57,6 @@ body {
     font-size: 14px;
 }
 
-.status-users {
-    margin-left: auto;
-    color: #666;
-}
-
-.status-users strong {
-    color: #00D4FF;
-}
-
 .dot {
     width: 8px;
     height: 8px;
@@ -92,26 +83,13 @@ body {
     color: #E0E0E0;
     font-size: 18px;
     font-weight: 400;
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 15px;
 }
 
-.card-header h2 {
-    margin-bottom: 0;
-}
-
-.count-badge {
-    background: #00D4FF;
-    color: #0A0A0A;
-    padding: 2px 12px;
-    border-radius: 12px;
+.count {
+    color: #666;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 300;
 }
 
 .form-group {
@@ -152,15 +130,10 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
-    margin-top: 5px;
 }
 
 .btn-primary:hover {
     background: #00E5FF;
-}
-
-.btn-primary:active {
-    background: #00B8D4;
 }
 
 .message {
@@ -185,87 +158,6 @@ body {
     color: #FF4444;
 }
 
-/* Tabela de usuários */
-.table-wrapper {
-    overflow-x: auto;
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-.table-wrapper::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
-}
-
-.table-wrapper::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.table-wrapper::-webkit-scrollbar-thumb {
-    background: #2A2A2A;
-    border-radius: 2px;
-}
-
-.users-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-}
-
-.users-table thead {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-.users-table th {
-    text-align: left;
-    padding: 10px 12px;
-    color: #666;
-    font-weight: 500;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    background: #1A1A1A;
-    border-bottom: 2px solid #2A2A2A;
-}
-
-.users-table td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #2A2A2A;
-    color: #E0E0E0;
-}
-
-.users-table tr:hover td {
-    background: #222222;
-}
-
-.users-table .empty {
-    text-align: center;
-    color: #555;
-    padding: 30px 0;
-}
-
-.users-table .user-id {
-    color: #444;
-    font-size: 12px;
-}
-
-.users-table .username {
-    color: #00D4FF;
-    font-weight: 500;
-}
-
-.users-table .email {
-    color: #888;
-    font-size: 13px;
-}
-
-.users-table .date {
-    color: #444;
-    font-size: 12px;
-}
-
 .api-endpoint {
     background: #0A0A0A;
     padding: 10px 14px;
@@ -276,10 +168,6 @@ body {
     gap: 12px;
     flex-wrap: wrap;
     border: 1px solid #2A2A2A;
-}
-
-.api-endpoint:last-child {
-    margin-bottom: 0;
 }
 
 .method {
@@ -302,6 +190,49 @@ body {
     color: #666;
     font-size: 12px;
     margin-left: auto;
+}
+
+#usersList {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#usersList::-webkit-scrollbar {
+    width: 4px;
+}
+
+#usersList::-webkit-scrollbar-thumb {
+    background: #2A2A2A;
+    border-radius: 2px;
+}
+
+.empty {
+    color: #555;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #2A2A2A;
+}
+
+.user-item .username {
+    color: #00D4FF;
+    font-weight: 500;
+}
+
+.user-item .email {
+    color: #666;
+    font-size: 13px;
+}
+
+.user-item .date {
+    color: #444;
+    font-size: 12px;
 }
 
 .footer {
