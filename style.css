@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
     background: #0A0A0A;
     color: #E0E0E0;
     display: flex;
@@ -15,7 +15,7 @@ body {
 }
 
 .container {
-    max-width: 700px;
+    max-width: 600px;
     width: 100%;
 }
 
@@ -57,6 +57,15 @@ body {
     font-size: 14px;
 }
 
+.status-users {
+    margin-left: auto;
+    color: #666;
+}
+
+.status-users strong {
+    color: #00D4FF;
+}
+
 .dot {
     width: 8px;
     height: 8px;
@@ -84,12 +93,6 @@ body {
     font-size: 18px;
     font-weight: 400;
     margin-bottom: 15px;
-}
-
-.count {
-    color: #666;
-    font-size: 14px;
-    font-weight: 300;
 }
 
 .form-group {
@@ -170,6 +173,10 @@ body {
     border: 1px solid #2A2A2A;
 }
 
+.api-endpoint:last-child {
+    margin-bottom: 0;
+}
+
 .method {
     font-size: 11px;
     font-weight: 700;
@@ -190,49 +197,6 @@ body {
     color: #666;
     font-size: 12px;
     margin-left: auto;
-}
-
-#usersList {
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-#usersList::-webkit-scrollbar {
-    width: 4px;
-}
-
-#usersList::-webkit-scrollbar-thumb {
-    background: #2A2A2A;
-    border-radius: 2px;
-}
-
-.empty {
-    color: #555;
-    text-align: center;
-    padding: 20px 0;
-}
-
-.user-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #2A2A2A;
-}
-
-.user-item .username {
-    color: #00D4FF;
-    font-weight: 500;
-}
-
-.user-item .email {
-    color: #666;
-    font-size: 13px;
-}
-
-.user-item .date {
-    color: #444;
-    font-size: 12px;
 }
 
 .footer {
