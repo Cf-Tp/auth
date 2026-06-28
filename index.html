@@ -16,6 +16,7 @@
         <div class="status">
             <span class="dot"></span>
             <span>Sistema de contas online</span>
+            <span class="status-users">Total: <strong id="totalUsers">0</strong></span>
         </div>
 
         <!-- Criar Conta -->
@@ -39,43 +40,42 @@
             <div id="registerMessage" class="message"></div>
         </div>
 
+        <!-- Login -->
+        <div class="card">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Usuário ou Email</label>
+                    <input type="text" id="loginUsername" placeholder="Digite seu usuário" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="loginPassword" placeholder="Digite sua senha" required>
+                </div>
+                <button type="submit" class="btn-primary">Entrar</button>
+            </form>
+            <div id="loginMessage" class="message"></div>
+        </div>
+
         <!-- API Info -->
         <div class="card">
-            <h2>API - WPF</h2>
+            <h2>API para WPF</h2>
             <div class="api-endpoint">
                 <span class="method">GET</span>
-                <span class="url">api/?action=check&username=admin</span>
+                <span class="url">/?check=admin</span>
                 <span class="desc">Verificar se existe</span>
             </div>
             <div class="api-endpoint">
                 <span class="method">GET</span>
-                <span class="url">api/?action=list</span>
+                <span class="url">/?list</span>
                 <span class="desc">Listar todos</span>
-            </div>
-            <div class="api-endpoint">
-                <span class="method">POST</span>
-                <span class="url">api/?action=register</span>
-                <span class="desc">Criar conta</span>
-            </div>
-            <div class="api-endpoint">
-                <span class="method">POST</span>
-                <span class="url">api/?action=login</span>
-                <span class="desc">Fazer login</span>
-            </div>
-        </div>
-
-        <!-- Lista de Contas -->
-        <div class="card">
-            <h2>Contas Cadastradas <span id="userCount" class="count">(0)</span></h2>
-            <div id="usersList">
-                <div class="empty">Nenhuma conta</div>
             </div>
         </div>
 
         <div class="footer">
-            <span>API v1.0</span>
+            <span>Dados salvos no localStorage</span>
             <span>|</span>
-            <span>PHP + MySQL</span>
+            <span>GitHub Pages</span>
         </div>
     </div>
 
