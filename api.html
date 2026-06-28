@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>DX11Loader - API</title>
+</head>
+<body>
+    <script>
+        // ========================================
+        // BANCO DE DADOS (KEYS)
+        // ========================================
+        const DB = {
+            getKeys() {
+                try {
+                    return JSON.parse(localStorage.getItem('dx11_keys') || '[]');
+                } catch {
+                    return [];
+                }
+            }
+        };
+
+        // ========================================
+        // FUNÇÃO PARA VERIFICAR KEY
+        // ========================================
+
+        function checkKey(key) {
+            const keys = DB.getKeys();
+            const found = keys.find(k => k.key === key);
+            
+            if (!found) {
+                return { valid: false, message: 'Invalid key' };
+            }
+
+            if (found.expires !== 'infinity') {
+                const now = new Date();
+                const exp = new Date(found.expires);
+                if (now > exp) {
+                    return { valid: false, message: 'Key expired' };
+                }
+            }
+
+            return { 
+                valid: true, 
+                message: 'Valid key',
+                expires: found.expires,
+                name: found.name
+            };
+        }
+
+        // ========================================
+        // API
+        // ========================================
+
+        function handleApiRequest() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.has('checkkey')) {
+                const key = urlParams.get('checkkey');
+                const result = checkKey(key);
+                
+                // LIMPA A TELA E MOSTRA SÓ O JSON
+                document.body.innerHTML = '';
+                document.write(JSON.stringify(result));
+                document.close();
+                return true;
+            }
+            
+            return false;
+        }
+
+        // ========================================
+        // INICIALIZAÇÃO
+        // ========================================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (handleApiRequest()) {
+                return;
+            }
+            
+            // Se acessar sem parâmetros, mostra a documentação
+            document.body.innerHTML = `
+                <div style="font-family: monospace; padding: 40px; text-align: center; background: #0A0A0A; color: #00D4FF; min-height: 100vh;">
+                    <h1>DX11LOADER API</h1>
+                    <p style="color: #666;">Key validation endpoint</p>
+                    <p style="color: #444; margin-top: 20px; font-size: 12px;">
+                        Usage: ?checkkey=YOUR_KEY
+                    </p>
+                    <p style="color: #333; margin-top: 10px; font-size: 12px;">
+                        Keys stored: ${DB.getKeys().length}
+                    </p>
+                </div>
+            `;
+        });
+
+        console.log('DX11Loader API running');
+        console.log('Keys stored:', DB.getKeys().length);
+    </script>
+</body>
+</html>
