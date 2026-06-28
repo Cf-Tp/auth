@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DX11Loader - Register</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>DX11LOADER</h1>
+            <span class="badge">Register</span>
+        </div>
+
+        <!-- Status -->
+        <div class="status">
+            <span class="dot"></span>
+            <span>Sistema de criação de contas</span>
+        </div>
+
+        <!-- Register Form -->
+        <div class="card">
+            <h2>Criar Conta</h2>
+            <p class="subtitle">Crie sua conta para acessar o loader</p>
+            
+            <form id="registerForm">
+                <div class="form-group">
+                    <label>Usuário</label>
+                    <input type="text" id="regUsername" placeholder="Escolha um usuário" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" placeholder="Seu email" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres" required>
+                </div>
+                <button type="submit" class="btn-primary">Criar Conta</button>
+            </form>
+            <div id="registerMessage" class="message"></div>
+        </div>
+
+        <!-- Login -->
+        <div class="card">
+            <h2>Já tem conta?</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Usuário ou Email</label>
+                    <input type="text" id="loginUsername" placeholder="Digite seu usuário ou email" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="loginPassword" placeholder="Digite sua senha" required>
+                </div>
+                <button type="submit" class="btn-primary">Entrar</button>
+            </form>
+            <div id="loginMessage" class="message"></div>
+        </div>
+
+        <div class="footer">
+            <span>DX11Loader v1.0</span>
+            <span>|</span>
+            <span>Contas seguras</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
