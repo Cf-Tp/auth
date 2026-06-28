@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DX11Loader - Login</title>
+    <style>
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0A0A0A;
+            color: #E0E0E0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-weight: 300;
+            font-size: 32px;
+            color: #00D4FF;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        .header p {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        /* ===== CARDS ===== */
+        .card {
+            background: #1A1A1A;
+            border-radius: 8px;
+            padding: 30px;
+            border: 1px solid #2A2A2A;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00D4FF, #00FFAA, #00D4FF);
+            background-size: 200% 100%;
+            animation: gradientMove 3s ease-in-out infinite;
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .card h2 {
+            font-weight: 400;
+            font-size: 20px;
+            color: #E0E0E0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        /* ===== FORM ===== */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            background: #0A0A0A;
+            border: 1px solid #2A2A2A;
+            border-radius: 4px;
+            color: #E0E0E0;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-group input:focus {
+            border-color: #00D4FF;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+        }
+        /* ===== BUTTONS ===== */
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #00D4FF, #00B8D4);
+            color: #0A0A0A;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        .btn-secondary {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            color: #00D4FF;
+            border: 1px solid #2A2A2A;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-secondary:hover {
+            border-color: #00D4FF;
+            background: rgba(0, 212, 255, 0.05);
+        }
+        /* ===== MESSAGES ===== */
+        .message {
+            margin-top: 15px;
+            padding: 10px 14px;
+            border-radius: 4px;
+            font-size: 14px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message.success {
+            display: block;
+            background: #003320;
+            border: 1px solid #00C851;
+            color: #00C851;
+        }
+        .message.error {
+            display: block;
+            background: #330000;
+            border: 1px solid #FF4444;
+            color: #FF4444;
+        }
+        /* ===== DIVIDER ===== */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+            color: #444;
+            font-size: 12px;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #2A2A2A;
+        }
+        /* ===== STATUS ===== */
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #00D4FF;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            color: #333;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+        .footer a {
+            color: #00D4FF;
+            text-decoration: none;
+        }
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #2A2A2A; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3A3A3A; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>DX11LOADER</h1>
+            <p>Sistema de contas</p>
+        </div>
+
+        <div class="status">
+            <span class="dot"></span>
+            <span>Online</span>
+            <span style="margin-left: auto;">Usuários: <strong id="totalUsers">0</strong></span>
+        </div>
+
+        <!-- Login -->
+        <div class="card" id="loginCard">
+            <h2>🔐 Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Usuário ou Email</label>
+                    <input type="text" id="loginUsername" placeholder="Digite seu usuário" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="loginPassword" placeholder="Digite sua senha" required>
+                </div>
+                <button type="submit" class="btn-primary">Entrar</button>
+            </form>
+            <div id="loginMessage" class="message"></div>
+            <div class="divider">ou</div>
+            <button class="btn-secondary" onclick="showRegister()">Criar Conta</button>
+        </div>
+
+        <!-- Registrar -->
+        <div class="card" id="registerCard" style="display: none;">
+            <h2>📝 Criar Conta</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label>Usuário</label>
+                    <input type="text" id="regUsername" placeholder="Escolha um usuário" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" placeholder="Seu email" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres" required>
+                </div>
+                <button type="submit" class="btn-primary">Criar Conta</button>
+            </form>
+            <div id="registerMessage" class="message"></div>
+            <div class="divider">ou</div>
+            <button class="btn-secondary" onclick="showLogin()">Já tenho conta</button>
+        </div>
+
+        <div class="footer">
+            <span>DX11Loader v1.0</span>
+            <span>•</span>
+            <a href="checklist.html" target="_blank">Admin</a>
+        </div>
+    </div>
+
+    <script>
+        // ============ PROTEÇÃO ANTI-INSPEÇÃO ============
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+                (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+                alert('🚫 Acesso negado!');
+                return false;
+            }
+        });
+
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            alert('🚫 Clique direito bloqueado!');
+        });
+
+        // ============ BANCO DE DADOS ============
+        const DB = {
+            getUsers() {
+                try {
+                    return JSON.parse(localStorage.getItem('dx11_users') || '[]');
+                } catch {
+                    return [];
+                }
+            },
+            setUsers(users) {
+                localStorage.setItem('dx11_users', JSON.stringify(users));
+            },
+            getIP() {
+                return new Promise((resolve) => {
+                    fetch('https://api.ipify.org?format=json')
+                        .then(r => r.json())
+                        .then(d => resolve(d.ip))
+                        .catch(() => resolve('Não disponível'));
+                });
+            }
+        };
+
+        // ============ FUNÇÕES ============
+
+        function loginUser(username, password) {
+            const users = DB.getUsers();
+            const user = users.find(u => u.username === username || u.email === username);
+            
+            if (!user) {
+                return { success: false, message: 'Usuário não encontrado' };
+            }
+            
+            try {
+                const decodedPassword = atob(user.password);
+                if (password !== decodedPassword) {
+                    return { success: false, message: 'Senha incorreta' };
+                }
+            } catch {
+                return { success: false, message: 'Erro ao verificar senha' };
+            }
+            
+            return {
+                success: true,
+                message: 'Login realizado com sucesso',
+                user: {
+                    id: user.id,
+                    username: user.username,
+                    email: user.email
+                }
+            };
+        }
+
+        function registerUser(username, email, password) {
+            const users = DB.getUsers();
+
+            if (!username || !email || !password) {
+                return { success: false, message: 'Preencha todos os campos' };
+            }
+
+            if (username.length < 3) {
+                return { success: false, message: 'Usuário deve ter no mínimo 3 caracteres' };
+            }
+
+            if (password.length < 6) {
+                return { success: false, message: 'Senha deve ter no mínimo 6 caracteres' };
+            }
+
+            if (!email.includes('@')) {
+                return { success: false, message: 'Email inválido' };
+            }
+
+            if (users.find(u => u.username === username)) {
+                return { success: false, message: 'Usuário já existe' };
+            }
+
+            if (users.find(u => u.email === email)) {
+                return { success: false, message: 'Email já cadastrado' };
+            }
+
+            const newUser = {
+                id: users.length + 1,
+                username: username,
+                email: email,
+                password: btoa(password),
+                created_at: new Date().toISOString(),
+                ip: 'Aguardando...'
+            };
+
+            // Pega o IP
+            DB.getIP().then(ip => {
+                newUser.ip = ip;
+                const users = DB.getUsers();
+                const index = users.findIndex(u => u.id === newUser.id);
+                if (index !== -1) {
+                    users[index].ip = ip;
+                    DB.setUsers(users);
+                }
+            });
+
+            users.push(newUser);
+            DB.setUsers(users);
+
+            return { 
+                success: true, 
+                message: 'Conta criada com sucesso!',
+                user: newUser
+            };
+        }
+
+        // ============ UI ============
+
+        function showMessage(elementId, message, type) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            el.textContent = message;
+            el.className = 'message ' + type;
+            
+            setTimeout(() => {
+                el.className = 'message';
+            }, 5000);
+        }
+
+        function updateUI() {
+            const users = DB.getUsers();
+            document.getElementById('totalUsers').textContent = users.length;
+        }
+
+        function showRegister() {
+            document.getElementById('loginCard').style.display = 'none';
+            document.getElementById('registerCard').style.display = 'block';
+        }
+
+        function showLogin() {
+            document.getElementById('loginCard').style.display = 'block';
+            document.getElementById('registerCard').style.display = 'none';
+        }
+
+        // ============ EVENTOS ============
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUI();
+
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('loginUsername').value.trim();
+                const password = document.getElementById('loginPassword').value;
+                const result = loginUser(username, password);
+                
+                if (result.success) {
+                    showMessage('loginMessage', result.message, 'success');
+                    this.reset();
+                } else {
+                    showMessage('loginMessage', result.message, 'error');
+                }
+            });
+
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('regUsername').value.trim();
+                const email = document.getElementById('regEmail').value.trim();
+                const password = document.getElementById('regPassword').value;
+                const result = registerUser(username, email, password);
+                
+                if (result.success) {
+                    showMessage('registerMessage', result.message, 'success');
+                    this.reset();
+                    updateUI();
+                    setTimeout(showLogin, 1500);
+                } else {
+                    showMessage('registerMessage', result.message, 'error');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

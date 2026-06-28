@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DX11Loader - Admin</title>
+    <style>
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0A0A0A;
+            color: #E0E0E0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        /* ===== SENHA ===== */
+        .password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+        }
+        .password-box {
+            background: #1A1A1A;
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid #2A2A2A;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        .password-box h2 {
+            color: #00D4FF;
+            font-weight: 300;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .password-box p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .password-box input {
+            width: 100%;
+            padding: 12px 14px;
+            background: #0A0A0A;
+            border: 1px solid #2A2A2A;
+            border-radius: 4px;
+            color: #E0E0E0;
+            font-size: 16px;
+            outline: none;
+            text-align: center;
+            letter-spacing: 4px;
+            transition: border-color 0.3s;
+        }
+        .password-box input:focus {
+            border-color: #00D4FF;
+        }
+        .password-box .btn-primary {
+            width: 100%;
+            padding: 14px;
+            margin-top: 15px;
+            background: linear-gradient(135deg, #00D4FF, #00B8D4);
+            color: #0A0A0A;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .password-box .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+        }
+        .password-box .error {
+            color: #FF4444;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+        }
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: none;
+        }
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #2A2A2A;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .header h1 {
+            color: #00D4FF;
+            font-weight: 300;
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+        .header .badge {
+            background: #FF4444;
+            color: #FFFFFF;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        .header .back-link {
+            color: #00D4FF;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 8px 16px;
+            border: 1px solid #00D4FF;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        .header .back-link:hover {
+            background: rgba(0, 212, 255, 0.1);
+        }
+        /* ===== STATS ===== */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: #1A1A1A;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #2A2A2A;
+            transition: border-color 0.3s;
+        }
+        .stat-card:hover {
+            border-color: #00D4FF;
+        }
+        .stat-card .label {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stat-card .value {
+            color: #00D4FF;
+            font-size: 28px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        .stat-card .value.ip {
+            font-size: 16px;
+            font-family: monospace;
+            color: #FFD700;
+        }
+        /* ===== CONTROLS ===== */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .controls h2 {
+            color: #888;
+            font-weight: 400;
+            font-size: 16px;
+        }
+        .controls .right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .refresh-btn, .export-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .refresh-btn {
+            background: #00D4FF;
+            color: #0A0A0A;
+        }
+        .refresh-btn:hover {
+            background: #00E5FF;
+        }
+        .export-btn {
+            background: transparent;
+            color: #00D4FF;
+            border: 1px solid #00D4FF;
+        }
+        .export-btn:hover {
+            background: rgba(0, 212, 255, 0.1);
+        }
+        /* ===== TABLE ===== */
+        .table-wrapper {
+            background: #1A1A1A;
+            border-radius: 8px;
+            border: 1px solid #2A2A2A;
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 550px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        th {
+            background: #0A0A0A;
+            padding: 12px 15px;
+            text-align: left;
+            color: #666;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #2A2A2A;
+        }
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #2A2A2A;
+            color: #E0E0E0;
+            font-size: 14px;
+        }
+        tr:hover td {
+            background: #222;
+        }
+        .username {
+            color: #00D4FF;
+            font-weight: 600;
+        }
+        .email {
+            color: #888;
+        }
+        .ip {
+            color: #FFD700;
+            font-family: monospace;
+            font-size: 13px;
+        }
+        .date {
+            color: #555;
+            font-size: 12px;
+        }
+        .id-col {
+            color: #444;
+            font-size: 12px;
+        }
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #555;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #555;
+        }
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            color: #333;
+            font-size: 12px;
+            padding: 20px 0;
+            margin-top: 30px;
+            border-top: 1px solid #2A2A2A;
+        }
+        .footer span {
+            margin: 0 10px;
+        }
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #2A2A2A; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3A3A3A; }
+        /* ===== COPY BUTTON ===== */
+        .copy-btn {
+            background: transparent;
+            border: 1px solid #2A2A2A;
+            color: #666;
+            padding: 2px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s;
+            margin-left: 5px;
+        }
+        .copy-btn:hover {
+            border-color: #00D4FF;
+            color: #00D4FF;
+        }
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1A1A1A;
+            border: 1px solid #00D4FF;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: #E0E0E0;
+            font-size: 14px;
+            display: none;
+            z-index: 999;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+        }
+        .toast.show {
+            display: block;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .toast.success { border-color: #00C851; }
+        .toast.error { border-color: #FF4444; }
+    </style>
+</head>
+<body>
+    <!-- ===== TELA DE SENHA ===== -->
+    <div class="password-overlay" id="passwordOverlay">
+        <div class="password-box">
+            <h2>🔒 Área Restrita</h2>
+            <p>Digite a senha de administrador para acessar</p>
+            <input type="password" id="adminPassword" placeholder="••••••••" maxlength="20" autofocus>
+            <button class="btn-primary" onclick="verifyPassword()">Acessar</button>
+            <div class="error" id="passwordError">Senha incorreta!</div>
+        </div>
+    </div>
+
+    <!-- ===== CONTEÚDO ===== -->
+    <div class="container" id="mainContent">
+        <div class="header">
+            <h1>DX11LOADER</h1>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <span class="badge">🔐 ADMIN</span>
+                <a href="index.html" class="back-link">← Voltar</a>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="label">Total de Usuários</div>
+                <div class="value" id="totalUsers">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Seu IP</div>
+                <div class="value ip" id="currentIp">Carregando...</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Última Atualização</div>
+                <div class="value" id="lastUpdate">-</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <h2>📋 Usuários Cadastrados</h2>
+            <div class="right">
+                <button class="export-btn" onclick="exportData()">📤 Exportar JSON</button>
+                <button class="refresh-btn" onclick="loadData()">🔄 Atualizar</button>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuário</th>
+                        <th>Email</th>
+                        <th>IP</th>
+                        <th>Data de Criação</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTable">
+                    <tr>
+                        <td colspan="5" class="empty">Nenhum usuário cadastrado</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <span>DX11Loader Checklist v2.0</span>
+            <span>|</span>
+            <span>🔒 Área restrita</span>
+            <span>|</span>
+            <span>Anti-inspeção ativado</span>
+        </div>
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ========================================
+        // 🔒 PROTEÇÃO ANTI-INSPEÇÃO (NÍVEL MÁXIMO)
+        // ========================================
+        
+        // 1. Bloquear teclas F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+                (e.ctrlKey && e.key === 'U') ||
+                (e.ctrlKey && e.key === 'S') ||
+                (e.ctrlKey && e.key === 'P')) {
+                e.preventDefault();
+                showToast('🚫 Acesso negado!', 'error');
+                return false;
+            }
+        });
+
+        // 2. Bloquear clique direito
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            showToast('🚫 Clique direito bloqueado!', 'error');
+        });
+
+        // 3. Bloquear seleção de texto (proteção extra)
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+
+        // 4. Bloquear drag (arrastar)
+        document.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+        });
+
+        // 5. Detectar DevTools aberto (tentativa)
+        (function detectDevTools() {
+            const element = new Image();
+            Object.defineProperty(element, 'id', {
+                get: function() {
+                    showToast('🚫 DevTools detectado!', 'error');
+                    document.body.innerHTML = '<h1 style="color:#FF4444;text-align:center;margin-top:50px;">🚫 Acesso Negado</h1>';
+                }
+            });
+            console.log('%c', element);
+        })();
+
+        // 6. Prevenir que a página seja carregada em iframe
+        if (window.top !== window.self) {
+            document.body.innerHTML = '<h1 style="color:#FF4444;text-align:center;margin-top:50px;">🚫 Acesso Negado</h1>';
+        }
+
+        // ========================================
+        // 🔐 SISTEMA DE SENHA
+        // ========================================
+
+        // ⚠️ MUDE A SENHA AQUI ⚠️
+        const ADMIN_PASSWORD = 'admin123';
+
+        function verifyPassword() {
+            const input = document.getElementById('adminPassword');
+            const error = document.getElementById('passwordError');
+            
+            if (input.value === ADMIN_PASSWORD) {
+                document.getElementById('passwordOverlay').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                loadData();
+                showToast('✅ Acesso autorizado!', 'success');
+            } else {
+                error.style.display = 'block';
+                input.value = '';
+                input.focus();
+                setTimeout(() => { error.style.display = 'none'; }, 3000);
+                showToast('❌ Senha incorreta!', 'error');
+            }
+        }
+
+        // Enter para logar
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('adminPassword').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    verifyPassword();
+                }
+            });
+        });
+
+        // ========================================
+        // 📊 BANCO DE DADOS
+        // ========================================
+
+        const DB = {
+            getUsers() {
+                try {
+                    return JSON.parse(localStorage.getItem('dx11_users') || '[]');
+                } catch {
+                    return [];
+                }
+            }
+        };
+
+        // ========================================
+        // 🌐 FUNÇÕES
+        // ========================================
+
+        function getIP() {
+            return new Promise((resolve) => {
+                fetch('https://api.ipify.org?format=json')
+                    .then(response => response.json())
+                    .then(data => resolve(data.ip))
+                    .catch(() => resolve('Não disponível'));
+            });
+        }
+
+        function copyIP(ip) {
+            navigator.clipboard.writeText(ip).then(() => {
+                showToast('✅ IP copiado: ' + ip, 'success');
+            }).catch(() => {
+                const input = document.createElement('input');
+                input.value = ip;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                showToast('✅ IP copiado: ' + ip, 'success');
+            });
+        }
+
+        function exportData() {
+            const users = DB.getUsers();
+            const data = {
+                exported_at: new Date().toISOString(),
+                total: users.length,
+                users: users
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `dx11_users_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('📤 Dados exportados com sucesso!', 'success');
+        }
+
+        async function loadData() {
+            const tbody = document.getElementById('usersTable');
+            const totalUsers = document.getElementById('totalUsers');
+            const currentIp = document.getElementById('currentIp');
+            const lastUpdate = document.getElementById('lastUpdate');
+
+            tbody.innerHTML = '<tr><td colspan="5" class="loading">⏳ Carregando dados...</td></tr>';
+
+            const users = DB.getUsers();
+            const ip = await getIP();
+
+            totalUsers.textContent = users.length;
+            currentIp.textContent = ip;
+            lastUpdate.textContent = new Date().toLocaleString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="empty">📭 Nenhum usuário cadastrado ainda</td></tr>';
+                return;
+            }
+
+            let html = '';
+            users.forEach(user => {
+                const date = new Date(user.created_at);
+                const formattedDate = date.toLocaleString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                const userIP = user.ip || 'Não disponível';
+
+                html += `
+                    <tr>
+                        <td class="id-col">#${user.id}</td>
+                        <td class="username">${escapeHtml(user.username)}</td>
+                        <td class="email">${escapeHtml(user.email)}</td>
+                        <td>
+                            <span class="ip">${userIP}</span>
+                            <button class="copy-btn" onclick="copyIP('${userIP}')">📋</button>
+                        </td>
+                        <td class="date">${formattedDate}</td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ========================================
+        // 🍞 TOAST NOTIFICATION
+        // ========================================
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type + ' show';
+            
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => {
+                toast.className = 'toast';
+            }, 4000);
+        }
+
+        // ========================================
+        // 🚀 INICIALIZAÇÃO
+        // ========================================
+
+        // Prevenir que o conteúdo apareça antes da senha
+        document.addEventListener('DOMContentLoaded', function() {
+            // O overlay já está visível por padrão
+            // O conteúdo só aparece após a senha correta
+        });
+    </script>
+</body>
+</html>
