@@ -17,33 +17,30 @@ const DB = {
 function registerUser(username, email, password) {
     const users = DB.getUsers();
 
-    // Validações
     if (!username || !email || !password) {
         return { success: false, message: 'Preencha todos os campos' };
     }
 
     if (username.length < 3) {
-        return { success: false, message: 'Usuário deve ter no mínimo 3 caracteres' };
+        return { success: false, message: 'Usuario deve ter no minimo 3 caracteres' };
     }
 
     if (password.length < 6) {
-        return { success: false, message: 'Senha deve ter no mínimo 6 caracteres' };
+        return { success: false, message: 'Senha deve ter no minimo 6 caracteres' };
     }
 
     if (!email.includes('@')) {
-        return { success: false, message: 'Email inválido' };
+        return { success: false, message: 'Email invalido' };
     }
 
-    // Verificar duplicados
     if (users.find(u => u.username === username)) {
-        return { success: false, message: 'Usuário já existe' };
+        return { success: false, message: 'Usuario ja existe' };
     }
 
     if (users.find(u => u.email === email)) {
-        return { success: false, message: 'Email já cadastrado' };
+        return { success: false, message: 'Email ja cadastrado' };
     }
 
-    // Criar usuário
     const newUser = {
         id: users.length + 1,
         username: username,
@@ -76,7 +73,7 @@ function loginUser(username, password) {
     const user = users.find(u => u.username === username || u.email === username);
 
     if (!user) {
-        return { success: false, message: 'Usuário não encontrado' };
+        return { success: false, message: 'Usuario nao encontrado' };
     }
 
     const decodedPassword = atob(user.password);
@@ -124,12 +121,30 @@ function listUsers() {
     }));
 }
 
-// ============ UI ============
+// ============ API ============
 
-function updateUI() {
-    const users = DB.getUsers();
-    document.getElementById('totalUsers').textContent = users.length;
+function handleApiRequest() {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // Verificar se existe
+    if (urlParams.has('check')) {
+        const username = urlParams.get('check');
+        const result = checkUser(username);
+        document.write(JSON.stringify(result));
+        return true;
+    }
+    
+    // Listar todos
+    if (urlParams.has('list')) {
+        const users = listUsers();
+        document.write(JSON.stringify(users));
+        return true;
+    }
+    
+    return false;
 }
+
+// ============ UI ============
 
 function showMessage(elementId, message, type = 'success') {
     const el = document.getElementById(elementId);
@@ -141,77 +156,68 @@ function showMessage(elementId, message, type = 'success') {
     }, 5000);
 }
 
-// ============ EVENTOS ============
-
-// Registrar
-document.getElementById('registerForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const username = document.getElementById('regUsername').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const password = document.getElementById('regPassword').value;
-
-    const result = registerUser(username, email, password);
-
-    if (result.success) {
-        showMessage('registerMessage', result.message, 'success');
-        document.getElementById('registerForm').reset();
-        updateUI();
-    } else {
-        showMessage('registerMessage', result.message, 'error');
+function updateUI() {
+    const users = DB.getUsers();
+    const totalUsers = document.getElementById('totalUsers');
+    if (totalUsers) {
+        totalUsers.textContent = users.length;
     }
-});
-
-// Login
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const username = document.getElementById('loginUsername').value.trim();
-    const password = document.getElementById('loginPassword').value;
-
-    const result = loginUser(username, password);
-
-    if (result.success) {
-        showMessage('loginMessage', result.message, 'success');
-        document.getElementById('loginForm').reset();
-    } else {
-        showMessage('loginMessage', result.message, 'error');
-    }
-});
-
-// ============ API PARA WPF ============
-
-// Processar requisições da URL (WPF usa isso)
-function handleApiRequest() {
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    // Verificar se existe
-    if (urlParams.has('check')) {
-        const username = urlParams.get('check');
-        const result = checkUser(username);
-        document.body.innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
-        return true;
-    }
-    
-    // Listar todos
-    if (urlParams.has('list')) {
-        const users = listUsers();
-        document.body.innerHTML = `<pre>${JSON.stringify(users, null, 2)}</pre>`;
-        return true;
-    }
-    
-    return false;
 }
 
-// ============ INIT ============
+// ============ EVENTOS ============
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Se for requisição da API, não mostra a interface
+    // Se for requisição da API, mostra JSON e para
     if (handleApiRequest()) {
         return;
     }
     
     updateUI();
-    console.log('✅ Sistema de contas online');
-    console.log('📌 WPF pode consultar: /?check=usuario');
+
+    // Registrar
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('regUsername').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+
+            const result = registerUser(username, email, password);
+
+            if (result.success) {
+                showMessage('registerMessage', result.message, 'success');
+                this.reset();
+                updateUI();
+            } else {
+                showMessage('registerMessage', result.message, 'error');
+            }
+        });
+    }
+
+    // Login
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            const result = loginUser(username, password);
+
+            if (result.success) {
+                showMessage('loginMessage', result.message, 'success');
+                this.reset();
+            } else {
+                showMessage('loginMessage', result.message, 'error');
+            }
+        });
+    }
 });
+
+console.log('✅ API do DX11Loader rodando!');
+console.log('📌 Endpoints:');
+console.log('   /?check=admin  - Verifica se admin existe');
+console.log('   /?list         - Lista todos os usuarios');
