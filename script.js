@@ -55,40 +55,7 @@ function registerUser(username, email, password) {
     return { 
         success: true, 
         message: 'Conta criada com sucesso!',
-        user: {
-            id: newUser.id,
-            username: newUser.username,
-            email: newUser.email
-        }
-    };
-}
-
-function loginUser(username, password) {
-    const users = DB.getUsers();
-
-    if (!username || !password) {
-        return { success: false, message: 'Preencha todos os campos' };
-    }
-
-    const user = users.find(u => u.username === username || u.email === username);
-
-    if (!user) {
-        return { success: false, message: 'Usuario nao encontrado' };
-    }
-
-    const decodedPassword = atob(user.password);
-    if (password !== decodedPassword) {
-        return { success: false, message: 'Senha incorreta' };
-    }
-
-    return {
-        success: true,
-        message: 'Login realizado com sucesso',
-        user: {
-            id: user.id,
-            username: user.username,
-            email: user.email
-        }
+        user: newUser
     };
 }
 
@@ -126,15 +93,15 @@ function listUsers() {
 function handleApiRequest() {
     const urlParams = new URLSearchParams(window.location.search);
     
-    // Verificar se existe
     if (urlParams.has('check')) {
         const username = urlParams.get('check');
         const result = checkUser(username);
+        
+        // Retorna JSON puro
         document.write(JSON.stringify(result));
         return true;
     }
     
-    // Listar todos
     if (urlParams.has('list')) {
         const users = listUsers();
         document.write(JSON.stringify(users));
@@ -146,8 +113,9 @@ function handleApiRequest() {
 
 // ============ UI ============
 
-function showMessage(elementId, message, type = 'success') {
+function showMessage(elementId, message, type) {
     const el = document.getElementById(elementId);
+    if (!el) return;
     el.textContent = message;
     el.className = 'message ' + type;
     
@@ -167,7 +135,7 @@ function updateUI() {
 // ============ EVENTOS ============
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Se for requisição da API, mostra JSON e para
+    // Se for API, mostra JSON e para
     if (handleApiRequest()) {
         return;
     }
@@ -179,13 +147,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (registerForm) {
         registerForm.addEventListener('submit', function(e) {
             e.preventDefault();
-
             const username = document.getElementById('regUsername').value.trim();
             const email = document.getElementById('regEmail').value.trim();
             const password = document.getElementById('regPassword').value;
-
             const result = registerUser(username, email, password);
-
+            
             if (result.success) {
                 showMessage('registerMessage', result.message, 'success');
                 this.reset();
@@ -201,18 +167,23 @@ document.addEventListener('DOMContentLoaded', function() {
     if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
-
             const username = document.getElementById('loginUsername').value.trim();
             const password = document.getElementById('loginPassword').value;
-
-            const result = loginUser(username, password);
-
-            if (result.success) {
-                showMessage('loginMessage', result.message, 'success');
-                this.reset();
-            } else {
-                showMessage('loginMessage', result.message, 'error');
+            const users = DB.getUsers();
+            const user = users.find(u => u.username === username || u.email === username);
+            
+            if (!user) {
+                showMessage('loginMessage', 'Usuario nao encontrado', 'error');
+                return;
             }
+            
+            if (atob(user.password) !== password) {
+                showMessage('loginMessage', 'Senha incorreta', 'error');
+                return;
+            }
+            
+            showMessage('loginMessage', 'Login realizado com sucesso!', 'success');
+            this.reset();
         });
     }
 });
