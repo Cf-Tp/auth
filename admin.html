@@ -5,22 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DX11Loader - Admin</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background: #0A0A0A;
             color: #E0E0E0;
-            min-height: 100vh;
             padding: 20px;
+            min-height: 100vh;
         }
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1100px; margin: 0 auto; }
         .header {
             display: flex;
             justify-content: space-between;
@@ -31,31 +24,14 @@
             flex-wrap: wrap;
             gap: 15px;
         }
-        .header h1 {
-            color: #00D4FF;
-            font-weight: 300;
-            font-size: 28px;
-            letter-spacing: 1px;
-        }
+        .header h1 { color: #00D4FF; font-weight: 300; font-size: 28px; }
         .header .badge {
             background: #FF4444;
-            color: #FFFFFF;
+            color: #FFF;
             padding: 4px 12px;
             border-radius: 4px;
             font-weight: 600;
             font-size: 12px;
-        }
-        .header .back-link {
-            color: #00D4FF;
-            text-decoration: none;
-            font-size: 14px;
-            padding: 8px 16px;
-            border: 1px solid #00D4FF;
-            border-radius: 4px;
-            transition: all 0.3s;
-        }
-        .header .back-link:hover {
-            background: rgba(0, 212, 255, 0.1);
         }
         .stats {
             display: grid;
@@ -69,21 +45,9 @@
             border-radius: 8px;
             border: 1px solid #2A2A2A;
         }
-        .stat-card .label {
-            color: #666;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .stat-card .value {
-            color: #00D4FF;
-            font-size: 28px;
-            font-weight: 600;
-            margin-top: 5px;
-        }
-        .stat-card .value.expired {
-            color: #FF4444;
-        }
+        .stat-card .label { color: #666; font-size: 12px; text-transform: uppercase; }
+        .stat-card .value { color: #00D4FF; font-size: 28px; font-weight: 600; margin-top: 5px; }
+        .stat-card .value.expired { color: #FF4444; }
         .card {
             background: #1A1A1A;
             border-radius: 8px;
@@ -91,26 +55,10 @@
             border: 1px solid #2A2A2A;
             margin-bottom: 20px;
         }
-        .card h2 {
-            font-weight: 400;
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: #E0E0E0;
-        }
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            color: #888;
-            font-size: 13px;
-            margin-bottom: 5px;
-        }
+        .card h2 { font-weight: 400; font-size: 18px; margin-bottom: 20px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; color: #888; font-size: 13px; margin-bottom: 5px; }
         .form-group input, .form-group select {
             width: 100%;
             padding: 11px 14px;
@@ -120,15 +68,9 @@
             color: #E0E0E0;
             font-size: 14px;
             outline: none;
-            transition: border-color 0.3s;
         }
-        .form-group input:focus, .form-group select:focus {
-            border-color: #00D4FF;
-        }
-        .form-group select option {
-            background: #1A1A1A;
-            color: #E0E0E0;
-        }
+        .form-group input:focus, .form-group select:focus { border-color: #00D4FF; }
+        .form-group select option { background: #1A1A1A; color: #E0E0E0; }
         .btn-primary {
             padding: 12px 24px;
             background: #00D4FF;
@@ -140,14 +82,11 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        .btn-primary:hover {
-            background: #00E5FF;
-            transform: scale(1.02);
-        }
+        .btn-primary:hover { background: #00E5FF; transform: scale(1.02); }
         .btn-danger {
             padding: 12px 24px;
             background: #FF4444;
-            color: #FFFFFF;
+            color: #FFF;
             border: none;
             border-radius: 4px;
             font-size: 14px;
@@ -155,9 +94,7 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        .btn-danger:hover {
-            background: #FF6666;
-        }
+        .btn-danger:hover { background: #FF6666; }
         .btn-secondary {
             padding: 12px 24px;
             background: transparent;
@@ -169,31 +106,11 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        .btn-secondary:hover {
-            border-color: #00D4FF;
-        }
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-        .table-wrapper {
-            overflow-x: auto;
-            max-height: 450px;
-            overflow-y: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 600px;
-            font-size: 14px;
-        }
-        thead {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
+        .btn-secondary:hover { border-color: #00D4FF; }
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+        .table-wrapper { overflow-x: auto; max-height: 450px; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; font-size: 14px; }
+        thead { position: sticky; top: 0; z-index: 10; }
         th {
             background: #0A0A0A;
             padding: 12px 15px;
@@ -204,55 +121,19 @@
             text-transform: uppercase;
             border-bottom: 2px solid #2A2A2A;
         }
-        td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #2A2A2A;
-            color: #E0E0E0;
-        }
-        tr:hover td {
-            background: #222;
-        }
-        .key-code {
-            font-family: 'Consolas', monospace;
-            color: #00D4FF;
-            font-size: 13px;
-        }
-        .key-expired {
-            color: #FF4444;
-        }
-        .key-active {
-            color: #00C851;
-        }
-        .key-infinity {
-            color: #FFD700;
-        }
-        .empty {
-            text-align: center;
-            padding: 30px;
-            color: #555;
-        }
+        td { padding: 12px 15px; border-bottom: 1px solid #2A2A2A; color: #E0E0E0; }
+        tr:hover td { background: #222; }
+        .key-code { font-family: 'Consolas', monospace; color: #00D4FF; font-size: 13px; }
         .badge-status {
             padding: 3px 10px;
             border-radius: 12px;
             font-size: 12px;
             font-weight: 600;
         }
-        .badge-status.active {
-            background: #003320;
-            color: #00C851;
-        }
-        .badge-status.expired {
-            background: #330000;
-            color: #FF4444;
-        }
-        .badge-status.infinity {
-            background: #332200;
-            color: #FFD700;
-        }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #0A0A0A; }
-        ::-webkit-scrollbar-thumb { background: #2A2A2A; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #3A3A3A; }
+        .badge-status.active { background: #003320; color: #00C851; }
+        .badge-status.expired { background: #330000; color: #FF4444; }
+        .badge-status.infinity { background: #332200; color: #FFD700; }
+        .empty { text-align: center; padding: 30px; color: #555; }
         .toast {
             position: fixed;
             bottom: 30px;
@@ -270,10 +151,25 @@
         .toast.show { display: block; }
         .toast.success { border-color: #00C851; }
         .toast.error { border-color: #FF4444; }
-        .toast.info { border-color: #00D4FF; }
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        .generated-box {
+            background: #0A0A0A;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #00D4FF;
+            margin-top: 15px;
+            display: none;
+        }
+        .generated-box .label { color: #666; font-size: 12px; }
+        .generated-box .key {
+            font-family: 'Consolas', monospace;
+            color: #00D4FF;
+            font-size: 18px;
+            margin-top: 5px;
+            word-break: break-all;
         }
         .password-overlay {
             position: fixed;
@@ -297,17 +193,8 @@
             width: 90%;
             text-align: center;
         }
-        .password-box h2 {
-            color: #00D4FF;
-            font-weight: 300;
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        .password-box p {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
+        .password-box h2 { color: #00D4FF; font-weight: 300; font-size: 24px; margin-bottom: 10px; }
+        .password-box p { color: #666; font-size: 14px; margin-bottom: 20px; }
         .password-box input {
             width: 100%;
             padding: 12px 14px;
@@ -320,46 +207,13 @@
             text-align: center;
             letter-spacing: 4px;
         }
-        .password-box input:focus {
-            border-color: #00D4FF;
-        }
-        .password-box .btn-primary {
-            width: 100%;
-            margin-top: 15px;
-        }
-        .password-box .error {
-            color: #FF4444;
-            font-size: 13px;
-            margin-top: 10px;
-            display: none;
-        }
-        .main-content {
-            display: none;
-        }
-        .generated-box {
-            background: #0A0A0A;
-            padding: 15px;
-            border-radius: 4px;
-            border: 1px solid #00D4FF;
-            margin-top: 15px;
-            display: none;
-        }
-        .generated-box .label {
-            color: #666;
-            font-size: 12px;
-        }
-        .generated-box .key {
-            font-family: 'Consolas', monospace;
-            color: #00D4FF;
-            font-size: 18px;
-            margin-top: 5px;
-            word-break: break-all;
-        }
-        .generated-box .btn-secondary {
-            margin-top: 10px;
-            padding: 8px 16px;
-            font-size: 12px;
-        }
+        .password-box input:focus { border-color: #00D4FF; }
+        .password-box .btn-primary { width: 100%; margin-top: 15px; }
+        .password-box .error { color: #FF4444; font-size: 13px; margin-top: 10px; display: none; }
+        .main-content { display: none; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #2A2A2A; border-radius: 3px; }
     </style>
 </head>
 <body>
@@ -380,23 +234,14 @@
             <h1>DX11LOADER</h1>
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                 <span class="badge">ADMIN</span>
-                <a href="index.html" class="back-link">Back</a>
+                <a href="index.html" class="btn-secondary" style="text-decoration: none; padding: 8px 16px; font-size: 12px;">Back</a>
             </div>
         </div>
 
-        <div class="stats" id="stats">
-            <div class="stat-card">
-                <div class="label">Total Keys</div>
-                <div class="value" id="totalKeys">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">Active Keys</div>
-                <div class="value" id="activeKeys">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">Expired Keys</div>
-                <div class="value expired" id="expiredKeys">0</div>
-            </div>
+        <div class="stats">
+            <div class="stat-card"><div class="label">Total Keys</div><div class="value" id="totalKeys">0</div></div>
+            <div class="stat-card"><div class="label">Active Keys</div><div class="value" id="activeKeys">0</div></div>
+            <div class="stat-card"><div class="label">Expired Keys</div><div class="value expired" id="expiredKeys">0</div></div>
         </div>
 
         <!-- CREATE KEY -->
@@ -437,7 +282,7 @@
             <div class="generated-box" id="generatedBox">
                 <div class="label">Generated Key:</div>
                 <div class="key" id="newKeyDisplay"></div>
-                <button class="btn-secondary" onclick="copyKey()">Copy</button>
+                <button class="btn-secondary" onclick="copyKey()" style="margin-top:10px;padding:8px 16px;font-size:12px;">Copy</button>
             </div>
         </div>
 
@@ -450,18 +295,8 @@
             </div>
             <div class="table-wrapper">
                 <table>
-                    <thead>
-                        <tr>
-                            <th>Key</th>
-                            <th>Name</th>
-                            <th>Expires</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="keysTable">
-                        <tr><td colspan="5" class="empty">No keys found</td></tr>
-                    </tbody>
+                    <thead><tr><th>Key</th><th>Name</th><th>Expires</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody id="keysTable"><tr><td colspan="5" class="empty">No keys found</td></tr></tbody>
                 </table>
             </div>
         </div>
@@ -487,10 +322,6 @@
             e.preventDefault();
             return false;
         });
-
-        if (window.top !== window.self) {
-            document.body.innerHTML = '<h1 style="color:#FF4444;text-align:center;margin-top:50px;">Access Denied</h1>';
-        }
 
         // ========================================
         // PASSWORD
@@ -546,16 +377,14 @@
             let key = '';
             if (prefix) key += prefix.toUpperCase() + '-';
             
-            const segments = [];
             for (let s = 0; s < 4; s++) {
-                let segment = '';
                 for (let i = 0; i < 4; i++) {
-                    segment += chars.charAt(Math.floor(Math.random() * chars.length));
+                    key += chars.charAt(Math.floor(Math.random() * chars.length));
                 }
-                segments.push(segment);
+                if (s < 3) key += '-';
             }
             
-            return key + segments.join('-');
+            return key;
         }
 
         function getExpirationDate(expiration) {
@@ -576,14 +405,10 @@
 
         function formatExpiration(expires) {
             if (expires === 'infinity') return 'Infinity';
-            
             const date = new Date(expires);
             return date.toLocaleString('pt-BR', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
             });
         }
 
@@ -592,28 +417,26 @@
             return new Date() > new Date(expires);
         }
 
-        function getStatusText(expires) {
-            if (expires === 'infinity') return 'Infinity';
-            if (isExpired(expires)) return 'Expired';
-            return 'Active';
-        }
-
         function getStatusClass(expires) {
             if (expires === 'infinity') return 'infinity';
             if (isExpired(expires)) return 'expired';
             return 'active';
         }
 
+        function getStatusText(expires) {
+            if (expires === 'infinity') return 'Infinity';
+            if (isExpired(expires)) return 'Expired';
+            return 'Active';
+        }
+
         function createKey(name, expiration, prefix) {
             const keys = DB.getKeys();
-            
             const newKey = {
                 key: generateKey(prefix),
                 name: name,
                 created_at: new Date().toISOString(),
                 expires: getExpirationDate(expiration)
             };
-            
             keys.push(newKey);
             DB.setKeys(keys);
             return newKey;
@@ -640,11 +463,8 @@
         function loadKeys() {
             const keys = DB.getKeys();
             const tbody = document.getElementById('keysTable');
-            const totalKeys = document.getElementById('totalKeys');
-            const activeKeys = document.getElementById('activeKeys');
-            const expiredKeys = document.getElementById('expiredKeys');
-
-            totalKeys.textContent = keys.length;
+            
+            document.getElementById('totalKeys').textContent = keys.length;
             
             let active = 0, expired = 0;
             keys.forEach(k => {
@@ -653,8 +473,8 @@
                 else active++;
             });
             
-            activeKeys.textContent = active;
-            expiredKeys.textContent = expired;
+            document.getElementById('activeKeys').textContent = active;
+            document.getElementById('expiredKeys').textContent = expired;
 
             if (keys.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" class="empty">No license keys created yet</td></tr>';
@@ -663,17 +483,16 @@
 
             let html = '';
             keys.forEach(k => {
-                const status = getStatusText(k.expires);
                 const statusClass = getStatusClass(k.expires);
+                const statusText = getStatusText(k.expires);
                 const expiresDisplay = formatExpiration(k.expires);
-                const created = new Date(k.created_at).toLocaleString('pt-BR');
 
                 html += `
                     <tr>
                         <td class="key-code">${k.key}</td>
                         <td>${k.name}</td>
                         <td style="font-size:12px;">${expiresDisplay}</td>
-                        <td><span class="badge-status ${statusClass}">${status}</span></td>
+                        <td><span class="badge-status ${statusClass}">${statusText}</span></td>
                         <td>
                             <button class="btn-danger" onclick="deleteKey('${k.key}')" style="padding:4px 12px;font-size:12px;">Delete</button>
                         </td>
@@ -737,10 +556,6 @@
             loadKeys();
             showToast('Key generated successfully', 'success');
         });
-
-        // ========================================
-        // INIT
-        // ========================================
 
         console.log('DX11Loader Admin Panel');
         console.log('Keys stored: ' + DB.getKeys().length);
