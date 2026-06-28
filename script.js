@@ -98,8 +98,8 @@ function handleApiRequest() {
         const password = urlParams.get('password');
         const result = loginUser(username, password);
         
-        // LIMPA TUDO E MOSTRA SÓ O JSON
-        document.open();
+        // LIMPA A PÁGINA E MOSTRA SÓ O JSON
+        document.body.innerHTML = '';
         document.write(JSON.stringify(result));
         document.close();
         return true;
@@ -126,7 +126,7 @@ function handleApiRequest() {
             result = { exists: false };
         }
         
-        document.open();
+        document.body.innerHTML = '';
         document.write(JSON.stringify(result));
         document.close();
         return true;
@@ -142,7 +142,7 @@ function handleApiRequest() {
             created_at: u.created_at
         }));
         
-        document.open();
+        document.body.innerHTML = '';
         document.write(JSON.stringify(result));
         document.close();
         return true;
@@ -182,7 +182,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     updateUI();
 
-    // Registrar
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {
         registerForm.addEventListener('submit', function(e) {
@@ -202,7 +201,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Login
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
@@ -222,3 +220,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 console.log('API do DX11Loader rodando!');
+console.log('Teste no navegador:');
+console.log('  ?login&username=teste&password=123456');
