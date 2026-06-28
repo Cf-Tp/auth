@@ -14,6 +14,35 @@ const DB = {
 
 // ============ FUNÇÕES ============
 
+function checkUser(username) {
+    const users = DB.getUsers();
+    const user = users.find(u => u.username === username || u.email === username);
+    
+    if (user) {
+        return {
+            exists: true,
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                created_at: user.created_at
+            }
+        };
+    }
+    
+    return { exists: false };
+}
+
+function listUsers() {
+    const users = DB.getUsers();
+    return users.map(u => ({
+        id: u.id,
+        username: u.username,
+        email: u.email,
+        created_at: u.created_at
+    }));
+}
+
 function registerUser(username, email, password) {
     const users = DB.getUsers();
 
@@ -59,51 +88,28 @@ function registerUser(username, email, password) {
     };
 }
 
-function checkUser(username) {
-    const users = DB.getUsers();
-    const user = users.find(u => u.username === username || u.email === username);
-    
-    if (user) {
-        return {
-            exists: true,
-            user: {
-                id: user.id,
-                username: user.username,
-                email: user.email,
-                created_at: user.created_at
-            }
-        };
-    }
-    
-    return { exists: false };
-}
-
-function listUsers() {
-    const users = DB.getUsers();
-    return users.map(u => ({
-        id: u.id,
-        username: u.username,
-        email: u.email,
-        created_at: u.created_at
-    }));
-}
-
 // ============ API ============
 
 function handleApiRequest() {
     const urlParams = new URLSearchParams(window.location.search);
     
+    // Verificar se existe
     if (urlParams.has('check')) {
         const username = urlParams.get('check');
         const result = checkUser(username);
         
-        // Retorna JSON puro
+        // LIMPA A PÁGINA E MOSTRA SÓ O JSON
+        document.body.innerHTML = '';
         document.write(JSON.stringify(result));
         return true;
     }
     
+    // Listar todos
     if (urlParams.has('list')) {
         const users = listUsers();
+        
+        // LIMPA A PÁGINA E MOSTRA SÓ O JSON
+        document.body.innerHTML = '';
         document.write(JSON.stringify(users));
         return true;
     }
@@ -135,7 +141,7 @@ function updateUI() {
 // ============ EVENTOS ============
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Se for API, mostra JSON e para
+    // Se for API, mostra JSON e PARA
     if (handleApiRequest()) {
         return;
     }
@@ -188,7 +194,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-console.log('✅ API do DX11Loader rodando!');
-console.log('📌 Endpoints:');
-console.log('   /?check=admin  - Verifica se admin existe');
-console.log('   /?list         - Lista todos os usuarios');
+console.log('API do DX11Loader rodando!');
