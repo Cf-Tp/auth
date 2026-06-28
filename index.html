@@ -2,290 +2,13 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DX11Loader - Key System</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #0A0A0A;
-            color: #E0E0E0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 450px;
-            width: 100%;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .header h1 {
-            font-weight: 300;
-            font-size: 34px;
-            color: #00D4FF;
-            letter-spacing: 3px;
-            text-shadow: 0 0 30px rgba(0, 212, 255, 0.15);
-        }
-        .header p {
-            color: #555;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-        .card {
-            background: #1A1A1A;
-            border-radius: 10px;
-            padding: 35px;
-            border: 1px solid #2A2A2A;
-            position: relative;
-            overflow: hidden;
-        }
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #00D4FF, #00FFAA, #00D4FF);
-            background-size: 200% 100%;
-            animation: gradientMove 3s ease-in-out infinite;
-        }
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .card h2 {
-            font-weight: 400;
-            font-size: 18px;
-            color: #E0E0E0;
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        .form-group {
-            margin-bottom: 18px;
-        }
-        .form-group label {
-            display: block;
-            color: #888;
-            font-size: 13px;
-            margin-bottom: 6px;
-            font-weight: 500;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 13px 15px;
-            background: #0A0A0A;
-            border: 1px solid #2A2A2A;
-            border-radius: 6px;
-            color: #E0E0E0;
-            font-size: 15px;
-            font-family: 'Consolas', monospace;
-            letter-spacing: 2px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-        .form-group input:focus {
-            border-color: #00D4FF;
-        }
-        .btn-primary {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #00D4FF, #00B8D4);
-            color: #0A0A0A;
-            border: none;
-            border-radius: 6px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            letter-spacing: 1px;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 25px rgba(0, 212, 255, 0.25);
-        }
-        .message {
-            margin-top: 15px;
-            padding: 12px 15px;
-            border-radius: 6px;
-            font-size: 14px;
-            display: none;
-            animation: slideDown 0.3s ease;
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .message.success {
-            display: block;
-            background: #003320;
-            border: 1px solid #00C851;
-            color: #00C851;
-        }
-        .message.error {
-            display: block;
-            background: #330000;
-            border: 1px solid #FF4444;
-            color: #FF4444;
-        }
-        .toggle-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 15px 0 20px 0;
-        }
-        .toggle-switch {
-            position: relative;
-            width: 46px;
-            height: 26px;
-            flex-shrink: 0;
-            cursor: pointer;
-        }
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #333333;
-            transition: 0.3s;
-            border-radius: 26px;
-        }
-        .toggle-slider::before {
-            content: "";
-            position: absolute;
-            height: 20px;
-            width: 20px;
-            left: 3px;
-            bottom: 3px;
-            background: #888888;
-            transition: 0.3s;
-            border-radius: 50%;
-        }
-        .toggle-switch input:checked + .toggle-slider {
-            background: #00D4FF;
-        }
-        .toggle-switch input:checked + .toggle-slider::before {
-            transform: translateX(20px);
-            background: #FFFFFF;
-        }
-        .toggle-label {
-            color: #888;
-            font-size: 13px;
-            user-select: none;
-        }
-        .footer {
-            text-align: center;
-            color: #333;
-            font-size: 12px;
-            margin-top: 20px;
-        }
-        .footer a {
-            color: #00D4FF;
-            text-decoration: none;
-        }
-        .status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            justify-content: center;
-            color: #555;
-            font-size: 13px;
-            margin-bottom: 20px;
-        }
-        .dot {
-            width: 8px;
-            height: 8px;
-            background: #00D4FF;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0A0A0A; }
-        ::-webkit-scrollbar-thumb { background: #2A2A2A; border-radius: 3px; }
-    </style>
+    <title>DX11Loader - Key API</title>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>DX11LOADER</h1>
-            <p>Enter your license key</p>
-        </div>
-
-        <div class="status">
-            <span class="dot"></span>
-            <span>System Online</span>
-            <span style="margin-left: auto; color: #444;">v2.0</span>
-        </div>
-
-        <div class="card">
-            <h2>Authentication</h2>
-            
-            <form id="loginForm">
-                <div class="form-group">
-                    <label>License Key</label>
-                    <input type="text" id="keyInput" placeholder="XXXXX-XXXXX-XXXXX-XXXXX" required autofocus>
-                </div>
-
-                <div class="toggle-group">
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="rememberKey">
-                        <span class="toggle-slider"></span>
-                    </label>
-                    <span class="toggle-label">Remember this key</span>
-                </div>
-
-                <button type="submit" class="btn-primary">Authenticate</button>
-            </form>
-            
-            <div id="message" class="message"></div>
-        </div>
-
-        <div class="footer">
-            <span>DX11Loader Key System</span>
-            <span>•</span>
-            <a href="admin.html">Admin Panel</a>
-        </div>
-    </div>
-
     <script>
-        // ============ PROTEÇÃO ============
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || 
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
-                (e.ctrlKey && e.key === 'U') ||
-                (e.ctrlKey && e.key === 'S')) {
-                e.preventDefault();
-                return false;
-            }
-        });
-
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            return false;
-        });
-
-        // ============ DATABASE ============
+        // ========================================
+        // BANCO DE DADOS (KEYS)
+        // ========================================
         const DB = {
             getKeys() {
                 try {
@@ -293,104 +16,82 @@
                 } catch {
                     return [];
                 }
-            },
-            getRemembered() {
-                return localStorage.getItem('dx11_remembered') || '';
-            },
-            setRemembered(key) {
-                localStorage.setItem('dx11_remembered', key);
             }
         };
 
-        // ============ FUNÇÃO ============
+        // ========================================
+        // FUNÇÃO PARA VERIFICAR KEY
+        // ========================================
 
-        function validateKey(key) {
+        function checkKey(key) {
             const keys = DB.getKeys();
             const found = keys.find(k => k.key === key);
             
             if (!found) {
-                return { valid: false, message: 'Invalid license key' };
+                return { valid: false, message: 'Invalid key' };
             }
 
             if (found.expires !== 'infinity') {
                 const now = new Date();
                 const exp = new Date(found.expires);
                 if (now > exp) {
-                    return { valid: false, message: 'License key expired' };
+                    return { valid: false, message: 'Key expired' };
                 }
             }
 
             return { 
                 valid: true, 
-                message: 'Authentication successful',
-                user: found
+                message: 'Valid key',
+                expires: found.expires,
+                name: found.name
             };
         }
 
-        // ============ UI ============
+        // ========================================
+        // API
+        // ========================================
 
-        function showMessage(message, type) {
-            const el = document.getElementById('message');
-            el.textContent = message;
-            el.className = 'message ' + type;
+        function handleApiRequest() {
+            const urlParams = new URLSearchParams(window.location.search);
             
-            setTimeout(() => {
-                el.className = 'message';
-            }, 5000);
-        }
-
-        function loadRemembered() {
-            const remembered = DB.getRemembered();
-            if (remembered) {
-                document.getElementById('keyInput').value = remembered;
-                document.getElementById('rememberKey').checked = true;
+            if (urlParams.has('checkkey')) {
+                const key = urlParams.get('checkkey');
+                const result = checkKey(key);
+                
+                document.body.innerHTML = '';
+                document.write(JSON.stringify(result));
+                document.close();
+                return true;
             }
+            
+            return false;
         }
 
-        // ============ EVENTO ============
+        // ========================================
+        // INICIALIZAÇÃO
+        // ========================================
 
         document.addEventListener('DOMContentLoaded', function() {
-            loadRemembered();
-
-            document.getElementById('loginForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const key = document.getElementById('keyInput').value.trim();
-                const remember = document.getElementById('rememberKey').checked;
-
-                if (!key) {
-                    showMessage('Please enter your license key', 'error');
-                    return;
-                }
-
-                const result = validateKey(key);
-
-                if (result.valid) {
-                    if (remember) {
-                        DB.setRemembered(key);
-                    } else {
-                        DB.setRemembered('');
-                    }
-                    
-                    showMessage('Authentication successful!', 'success');
-                    
-                    // Simula loading
-                    const btn = document.querySelector('.btn-primary');
-                    btn.textContent = 'Loading...';
-                    btn.disabled = true;
-                    
-                    setTimeout(() => {
-                        btn.textContent = 'Authenticate';
-                        btn.disabled = false;
-                    }, 2000);
-                } else {
-                    showMessage(result.message, 'error');
-                }
-            });
+            if (handleApiRequest()) {
+                return;
+            }
+            
+            document.body.innerHTML = `
+                <div style="font-family: monospace; padding: 40px; text-align: center; background: #0A0A0A; color: #00D4FF; min-height: 100vh;">
+                    <h1>DX11LOADER API</h1>
+                    <p style="color: #666;">Key validation endpoint</p>
+                    <p style="color: #444; margin-top: 20px; font-size: 12px;">
+                        Usage: ?checkkey=YOUR_KEY
+                    </p>
+                    <p style="color: #333; margin-top: 10px; font-size: 12px;">
+                        Keys stored: ${DB.getKeys().length}
+                    </p>
+                </div>
+            `;
         });
 
-        console.log('DX11Loader Key System');
-        console.log('Keys stored: ' + DB.getKeys().length);
+        console.log('DX11Loader API running');
+        console.log('Keys stored:', DB.getKeys().length);
     </script>
 </body>
 </html>
